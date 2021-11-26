@@ -1,4 +1,10 @@
 {
-    "/server/dmg": 3001,
-    "/server/onlineBook": 3002
+    "/server/dmg": {
+        "port": 3001,
+        "files": ""
+    },
+    "/server/onlineBook": {
+        "port": 3002,
+        "files": "/api/files"
+    }
 }

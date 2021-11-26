@@ -86,7 +86,7 @@ async function saveImgs(req, res, fieldnames=['file']) {
         // throw new Error("IMAGE_IS_NOT_SAVED")
     }
 }
-
+// ********************************************************
 function rename(previousName, newName) {
     // console.log("Rename", previousName, newName);
     return new Promise((resolve, reject) => {
@@ -105,11 +105,53 @@ function unlink(tempPath) {
         })
     })
 }
-// ********************************************************
+// ************************- encoding and decoding -********************************
+
+const encodingBase64 = filePath => {
+    const file = fs.readFileSync(filePath, {encoding: 'base64'});
+    // return file.toString('base64');
+    return file;
+};
+
+const decodingBase64 = (data, fileName) => {
+    let buff = new Buffer.from(data, 'base64');
+    fs.writeFileSync(fileName, buff)
+}
+
+const encodingBase64OfText = (fileOrData) => {
+    let buff = new Buffer(fileOrData);
+    let base64data = buff.toString('base64');
+    return base64data;
+}
+
+const decodingBase64OfText = (data) => {
+    const file = fs.readFileSync(filePath);
+    let buff = new Buffer(file, 'base64');
+    let text = buff.toString('ascii');
+    return text;
+}
+
+function addDateTime(name) {
+    const newDate = new Date()
+    const orginalNameArr = name.split(".")
+    const fileType = orginalNameArr.pop()
+    const getDate = newDate.toLocaleDateString().split('/').join('_');
+    const getTime = newDate.toLocaleTimeString().split(' ')[0].split(':').join('_');
+    const milliseconds = newDate.getMilliseconds();
+    orginalNameArr.push(`_${getDate}_${getTime}_${milliseconds}`);
+    orginalNameArr.push(`.${fileType}`);
+    return orginalNameArr.join('');
+}
+
 module.exports = {
     writeData,
     rename,
     unlink,
     saveImg,
-    saveImgs
+    saveImgs,
+    encodingBase64,
+    decodingBase64,
+    encodingBase64OfText,
+    decodingBase64OfText,
+    addDateTime
 }
