@@ -1,8 +1,7 @@
 const fetch = require('node-fetch');
 const path = require("path");
-const FormData = require('form-data');
 const data = require('../data/data.json');
-const { saveImg, encodingBase64, decodingBase64, unlink, addDateTime } = require('../utilities');
+const { encodingBase64, decodingBase64, unlink, addDateTime } = require('../utilities');
 
 
 async function controller(req, res) {
