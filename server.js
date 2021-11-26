@@ -7,7 +7,7 @@ const multer  = require('multer');
 const { controller } = require('./controllers/controller');
 const { addDateTime } = require('./utilities');
 
-// const path = require("path");
+const data = require("./data/data.json");
 
 
 app.use(cors());
@@ -28,8 +28,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 const nameOfFileFromFrontend = upload.any();
 
-
-app.use('/server/onlineBook', nameOfFileFromFrontend, controller)
+Object.keys(data).forEach(value => {
+    app.use(value, nameOfFileFromFrontend, controller)
+})
 
 // Error handle
 app.use(function (err, req, res, next) {
