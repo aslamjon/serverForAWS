@@ -20,6 +20,19 @@ async function controller(req, res) {
     } else main(req, res);
 }
 
+async function safeParseJSON(response) {
+    const body = await response.text();
+    try {
+        return JSON.parse(body);
+    } catch (err) {
+        console.error("Error:", err);
+        console.error("Response body:", body);
+        // throw err;
+        // return new Error(err.message, 500);
+        return { Error: err.message, body };
+    }
+}
+
 function main(req, res) {
     const { port } = req.configData;
     const { url, method, headers, body } = req;
@@ -42,14 +55,14 @@ function main(req, res) {
     let bodyData = Object.keys(body).length ? JSON.stringify(body) : null;
 
     bodyData ? options.body = bodyData : null;
-
+    // console.log(options)
     let status = {};
     
     fetch(`http://localhost:${port}${url}`, options)
         .then(res => {
             status.status = res.status;
             status.statusText = res.statusText;
-            return res.json();
+            return safeParseJSON(res);
         })
         .then(json => {
             res.status(status.status).send(json);
