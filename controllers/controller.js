@@ -69,8 +69,13 @@ function main(req, res) {
             return json
         })
         .catch(e => {
-            console.log(e)
-            res.status(500).send({ message: e.message })
+            let message = e.message.replace(`http://localhost:${port}`, "") + `
+            
+            Please check request and try again. Or talk it to Developers. 
+            
+            Website: https://aslamjon.github.io
+            Telegram: @i_am_anonim`;
+            res.status(500).send({ message});
         });
     
     tempFilePath.forEach(value => { unlink(value) });
